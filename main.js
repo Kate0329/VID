@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 定義後端 API 的基礎 URL
+    const API_BASE_URL = 'https://my-yolo-app.onrender.com';
+    
     const dropZone = document.getElementById('dropZone');
     const imageInput = document.getElementById('imageInput');
     const imagePreview = document.getElementById('imagePreview');
@@ -166,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 添加載入狀態
         dropZone.classList.add('loading');
 
-        fetch('/upload', {
+        fetch(`${API_BASE_URL}/upload`, {
             method: 'POST',
             body: formData
         })
@@ -179,6 +182,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 500);
 
             if (data.success) {
+                // 更新顯示結果的邏輯，確保使用完整的 URL
+                if (data.type === 'image' && data.analysis.result_image) {
+                    resultImage.src = `${API_BASE_URL}/uploads/${data.analysis.result_image}`;
+                } else if (data.type === 'video' && data.analysis.output_video) {
+                    resultVideo.src = `${API_BASE_URL}/uploads/${data.analysis.output_video}`;
+                }
                 displayResults(data);
             } else {
                 showNotification('錯誤：' + data.error, 'error');
@@ -223,8 +232,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // 顯示標註後的圖片
-            resultImage.src = `/uploads/${analysis.result_image}`;
             resultImage.classList.remove('d-none');
+            resultVideo.classList.add('d-none');
         } else if (data.type === 'video') {
             // 顯示影片分析結果
             const analysis = data.analysis;
@@ -247,20 +256,18 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // 顯示處理後的影片
-            resultVideo.src = `/uploads/${analysis.output_video}`;
             resultVideo.classList.remove('d-none');
+            resultImage.classList.add('d-none');
         }
 
         // 顯示檢測結果
         if (data.analysis.detections && data.analysis.detections.length > 0) {
-            // 對於影片，我們可能想要顯示每個物件出現的次數
             const detectionCounts = {};
             data.analysis.detections.forEach(detection => {
                 const className = detection.class;
                 detectionCounts[className] = (detectionCounts[className] || 0) + 1;
             });
 
-            // 顯示檢測結果
             Object.entries(detectionCounts).forEach(([className, count]) => {
                 const detectionItem = document.createElement('div');
                 detectionItem.className = 'detection-item';
