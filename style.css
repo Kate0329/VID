@@ -1,0 +1,60 @@
+.drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.drop-zone:hover {
+    background: #e9ecef;
+    border-color: #6c757d;
+}
+
+.drop-zone-text {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.drop-zone.dragover {
+    background: #e9ecef;
+    border-color: #0d6efd;
+}
+
+#imagePreview {
+    max-height: 300px;
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
+    border-radius: 4px;
+}
+
+.table td:first-child {
+    font-weight: bold;
+    width: 30%;
+}
+
+.card {
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+} 
