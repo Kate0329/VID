@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory, Response
+from flask_cors import CORS
 import os
 from PIL import Image
 import numpy as np
@@ -8,6 +9,13 @@ import torch
 from datetime import datetime
 
 app = Flask(__name__)
+CORS(app)  # 啟用 CORS，允許所有來源的跨域請求
+
+# 如果需要更細緻的 CORS 設定，可以使用以下方式：
+# CORS(app, resources={
+#     r"/upload/*": {"origins": ["http://localhost:3000"]},
+#     r"/uploads/*": {"origins": "*"}
+# })
 
 # 設定上傳文件夾
 UPLOAD_FOLDER = 'uploads'
